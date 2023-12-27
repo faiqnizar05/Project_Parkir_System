@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from datetime import datetime
 
 class ParkirApp:
     def __init__(self, master):
@@ -7,7 +8,7 @@ class ParkirApp:
         self.master.title("Sistem Parkir")
         self.daftar_parkir = []  # Menyimpan data parkir di sini
         
-        self.nomor_plat_label = tk.Label(master, text="Nomor Plat:")
+        self.nomor_plat_label = tk.Label(master, text="Plat Nomor:")
         self.nomor_plat_label.grid(row=0, column=0, padx=10, pady=10)
 
         self.nomor_plat_entry = tk.Entry(master)
@@ -33,17 +34,19 @@ class ParkirApp:
         jenis_kendaraan = self.jenis_kendaraan_entry.get()
 
         if nomor_plat and jenis_kendaraan:
-            self.daftar_parkir.append({'Nomor Plat': nomor_plat, 'Jenis Kendaraan': jenis_kendaraan})
-            self.result_label.config(text=f"Kendaraan dengan nomor plat {nomor_plat} ({jenis_kendaraan}) berhasil diparkir.")
+            jam_masuk = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.daftar_parkir.append({'Plat Nomor': nomor_plat, 'Jenis Kendaraan': jenis_kendaraan, 'Jam Masuk': jam_masuk})
+            output_text = f"Kendaraan dengan plat nomor {nomor_plat} ({jenis_kendaraan}) berhasil diparkir pada {jam_masuk}."
+            self.result_label.config(text=output_text)
             self.reset_entry_fields()
         else:
-            messagebox.showwarning("Peringatan", "Nomor Plat dan Jenis Kendaraan harus diisi.")
+            messagebox.showwarning("Peringatan", "Plat Nomor dan Jenis Kendaraan harus diisi.")
 
     def tampilkan_daftar_parkir(self):
         if not self.daftar_parkir:
             messagebox.showinfo("Info", "Daftar parkir kosong.")
         else:
-            daftar_parkir_str = "\n".join([f"{idx}. Nomor Plat: {kendaraan['Nomor Plat']}, Jenis Kendaraan: {kendaraan['Jenis Kendaraan']}" for idx, kendaraan in enumerate(self.daftar_parkir, start=1)])
+            daftar_parkir_str = "\n".join([f"{idx}. Plat Nomor: {kendaraan['Plat Nomor']}, Jenis Kendaraan: {kendaraan['Jenis Kendaraan']}, Jam Masuk: {kendaraan['Jam Masuk']}" for idx, kendaraan in enumerate(self.daftar_parkir, start=1)])
             messagebox.showinfo("Daftar Parkir", daftar_parkir_str)
 
     def reset_entry_fields(self):
